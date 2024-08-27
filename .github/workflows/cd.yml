@@ -13,7 +13,7 @@ on:
   
 env:
    S3_LOCATION: ""
-   FILENAME: "/sales-not-null/sales-not-null.json"
+   FILENAME: "./sales-not-null/sales-not-null.json"
 
 jobs:
   checkout:
