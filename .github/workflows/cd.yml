@@ -2,7 +2,13 @@
 name: glue-jobs-deploy 
 run-name: Glue Jobs Deployment Pipeline
 
-on:      
+on:  
+  push:
+    branches: 
+      - developer
+    paths:
+      - "**.json"
+      
   workflow_dispatch:
   
 env:
