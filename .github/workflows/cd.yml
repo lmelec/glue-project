@@ -19,10 +19,10 @@ jobs:
       - name: Download source code
         uses: actions/checkout@v2
 
-      - name: Extract bucket name 
-        run: |
-        SCRIPT_LOCATION=$(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
-        echo "Ubicacion del script: $SCRIPT_LOCATION"  
+  #    - name: Extract bucket name 
+  #      run: |
+  #      SCRIPT_LOCATION=$(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
+  #      echo "Ubicacion del script: $SCRIPT_LOCATION"  
 
   # deploy:
   #   needs: checkout
