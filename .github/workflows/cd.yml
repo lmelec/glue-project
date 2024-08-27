@@ -27,6 +27,6 @@ jobs:
     steps: 
       - name: Extract S3 Bucket Name   
         run: |
-              ls
+              ls -d */
               S3_ROUTE=$(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
               echo "Ubicacion del script: $SCRIPT_LOCATION"
