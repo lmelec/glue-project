@@ -1,28 +1,31 @@
 # Pipeline solo para Glue Jobs creados desde un Script Editor
 name: glue-jobs-deploy 
+run-name: Glue Jobs Deployment Pipeline
 
 on:
   push:
     branches: 
-            - developer
+      - developer
     paths:
-         - "**.json"
+      - "**.json"
+      
+  workflow_dispatch:
+  
 env:
-   SCRIPT_LOCATION = ""
-   FILE_PATH="/sales-not-null/sales-not-null.json"
+   SCRIPT_LOCATION: ""
+   FILE_PATH: "/sales-not-null/sales-not-null.json"
 
 jobs:
-
   checkout:
     runs-on: ubuntu-latest
     steps: 
       - name: Download Source Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
   extract: 
     runs-on: ubuntu-latest
     steps: 
       - name: Extract S3 Bucket Name    
         run: |
-        SCRIPT_LOCATION=$(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
-        echo "Ubicacion del script: $SCRIPT_LOCATION"
+              SCRIPT_LOCATION=$(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
+              echo "Ubicacion del script: $SCRIPT_LOCATION"
