@@ -12,8 +12,8 @@ on:
   workflow_dispatch:
   
 env:
-   SCRIPT_LOCATION: ""
-   FILE_PATH: "/sales-not-null/sales-not-null.json"
+   S3_LOCATION: ""
+   FILENAME: "/sales-not-null/sales-not-null.json"
 
 jobs:
   checkout:
@@ -27,5 +27,5 @@ jobs:
     steps: 
       - name: Extract S3 Bucket Name    
         run: |
-              SCRIPT_LOCATION=$(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
+              S3_LOCATION=$(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
               echo "Ubicacion del script: $SCRIPT_LOCATION"
