@@ -5,6 +5,8 @@ on:
   push:
     branches: 
             - developer
+    paths:
+      - "**.json"
 env:
    SCRIPT_LOCATION = ""
    FILE_PATH="/sales-not-null/sales-not-null.json"
@@ -15,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - name: Download source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Extract bucket name 
         run: |
