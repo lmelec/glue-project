@@ -27,7 +27,7 @@ jobs:
           ref: developer
       - name: Extract S3 Bucket Name   
         run: |
-              env.S3_ROUTE=$(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
+              S3_ROUTE=$(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
               echo "Ruta del S3: $S3_ROUTE"
   deploy:
     needs: checkout
