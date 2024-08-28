@@ -1,7 +1,7 @@
 {
   "name" : "sales-not-null",
   "jobMode" : "VISUAL",
-  "description" : "prueba 10",
+  "description" : "prueba 11",
   "role" : "arn:aws:iam::675896041266:role/service-role/AWSGlueServiceRole-PoC",
   "executionProperty" : {
     "maxConcurrentRuns" : 1
