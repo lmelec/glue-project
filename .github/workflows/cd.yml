@@ -29,20 +29,21 @@ jobs:
         run: |
               S3_ROUTE=$(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
               echo "la ruta del S3 es: $S3_ROUTE"
-              echo "S3_ROUTE=$S3_ROUTE" >> $GITHUB_ENV
+              echo "::set-output name=s3_route::$S3_ROUTE"
   deploy:
     needs: checkout
     runs-on: ubuntu-latest
     steps:  
     
        - name: print variable
-         run: echo '$S3_ROUTE'
+         run: |
+          echo "El valor de S3_ROUTE es: ${{ needs.extract-s3-route.outputs.s3-route }}"
          
        - name: Download script to S3
          uses: keithweaver/aws-s3-github-action@v1.0.0
          with:
            command: cp
-           source: $S3_ROUTE
+           source: $${{ needs.extract-s3-route.outputs.s3-route }}
            aws_access_key_id: $AWS_ACCESS_KEY
            aws_secret_access_key: $AWS_SECRET_KEY
            aws_region: us-east-1
