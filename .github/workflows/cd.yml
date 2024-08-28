@@ -55,4 +55,5 @@ jobs:
         if: success()
         run: | 
               mkdir artifact
+              echo {{needs.job.output.s3_route}}
               aws s3 cp {{needs.job.output.s3_route}} ./artifact
