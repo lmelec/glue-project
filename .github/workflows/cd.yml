@@ -20,6 +20,7 @@ env:
    FILENAME: "./sales-not-null/sales-not-null.json"
    AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
    AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+   AWS_REGION: "us-east-1"
 
 jobs:
   checkout:
@@ -43,15 +44,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:  
     
-      - name: Configure AWS credentials
-        if: success()
-        shell: bash
+      - name: Configure AWS CLI
         run: |
-             mkdir -p ~/.aws
-             touch ~/.aws/credentials
-             echo "[default]
-             aws_access_key_id = $AWS_ACCESS_KEY
-             aws_secret_access_key = $AWS_SECRET_KEY" > ~/.aws/credentials
+              aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+              aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              aws configure set region $AWS_REGION
           
       - name: Upload script to S3
         if: success()
