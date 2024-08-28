@@ -5,7 +5,7 @@ run-name: Glue Jobs Deployment Pipeline
 on:  
   push:
     branches: 
-      - developer
+      - main
     paths:
       - "**.json"
       
@@ -14,6 +14,8 @@ on:
 env:
    S3_ROUTE: ""
    FILENAME: "./sales-not-null/sales-not-null.json"
+   AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+   AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
 jobs:
   checkout:
@@ -25,7 +27,45 @@ jobs:
           ref: developer
       - name: Extract S3 Bucket Name   
         run: |
-              pwd
-              ls -la
               S3_ROUTE=$(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
-              echo "Ubicacion del script: $S3_ROUTE"    
+              echo "Ruta del S3: $S3_ROUTE"
+  deploy:
+    needs: checkout
+    runs-on: ubuntu-latest
+    steps:  
+       - name: Download and install AWS CLI
+         run: |
+           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+           unzip awscliv2.zip
+           sudo ./aws/install
+
+       - name: Configure AWS credentials
+         if: success()
+         shell: bash
+         run: |
+           mkdir -p ~/.aws
+           touch ~/.aws/credentials
+           echo "[default]
+           aws_access_key_id = $AWS_ACCESS_KEY
+           aws_secret_access_key = $AWS_SECRET_KEY" > ~/.aws/credentials
+          
+       - name: Download script to S3
+         if: success()
+         uses: keithweaver/aws-s3-github-action@v1.0.0
+         with:
+           command: cp
+           source: $S3_ROUTE
+           destination: ./
+           aws_access_key_id: $AWS_ACCESS_KEY
+           aws_secret_access_key: $AWS_SECRET_KEY
+           aws_region: us-east-1
+      
+      # - name: Deploy Script in Glue job
+      #   if: success()
+      #   run: |
+      #     aws glue update-job --job-name "PoC Job" --job-update \
+      #       "Role=AWSGlueServiceRole-PoC,Command={Name=glueetl,ScriptLocation=s3://${{secrets.S3_BUCKET_NAME}}/job_${GITHUB_SHA}.py},Connections={Connections=redshift}" \
+      #       --region us-east-1
+      
+      # - name: Remove AWS credentials
+      #   run: rm -rf ~/.aws           
