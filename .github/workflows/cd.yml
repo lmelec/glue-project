@@ -24,12 +24,11 @@ jobs:
       - name: Download Source Code
         uses: actions/checkout@v4
         with:
-          ref: developer
+          ref: main
       - name: Extract S3 Bucket Name   
         run: |
               S3_ROUTE = $(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
               echo "S3_ROUTE=$S3_ROUTE" >> $GITHUB_ENV
-              echo "Ruta del S3: $S3_ROUTE"
   deploy:
     needs: checkout
     runs-on: ubuntu-latest
