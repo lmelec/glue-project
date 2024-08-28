@@ -50,12 +50,10 @@ jobs:
    #        aws_secret_access_key = $AWS_SECRET_KEY" > ~/.aws/credentials
           
        - name: Download script to S3
-         if: success()
          uses: keithweaver/aws-s3-github-action@v1.0.0
          with:
            command: cp
            source: $S3_ROUTE
-           destination: ./
            aws_access_key_id: $AWS_ACCESS_KEY
            aws_secret_access_key: $AWS_SECRET_KEY
            aws_region: us-east-1
