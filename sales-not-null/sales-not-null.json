@@ -1,0 +1,42 @@
+{
+  "name" : "sales-not-null",
+  "jobMode" : "VISUAL",
+  "description" : "prueba 8",
+  "role" : "arn:aws:iam::675896041266:role/service-role/AWSGlueServiceRole-PoC",
+  "executionProperty" : {
+    "maxConcurrentRuns" : 1
+  },
+  "command" : {
+    "name" : "glueetl",
+    "scriptLocation" : "s3://aws-glue-assets-675896041266-us-east-1/scripts/sales-not-null.py",
+    "pythonVersion" : "3"
+  },
+  "defaultArguments" : {
+    "--enable-metrics" : "true",
+    "--enable-spark-ui" : "true",
+    "--extra-py-files" : "s3://aws-glue-studio-transforms-510798373988-prod-us-east-1/gs_common.py,s3://aws-glue-studio-transforms-510798373988-prod-us-east-1/gs_null_rows.py",
+    "--spark-event-logs-path" : "s3://aws-glue-assets-675896041266-us-east-1/sparkHistoryLogs/",
+    "--enable-job-insights" : "false",
+    "--enable-observability-metrics" : "true",
+    "--enable-glue-datacatalog" : "true",
+    "--enable-continuous-cloudwatch-log" : "true",
+    "--job-bookmark-option" : "job-bookmark-disable",
+    "--job-language" : "python",
+    "--TempDir" : "s3://aws-glue-assets-675896041266-us-east-1/temporary/"
+  },
+  "maxRetries" : 0,
+  "allocatedCapacity" : 10,
+  "timeout" : 2880,
+  "maxCapacity" : 10.0,
+  "glueVersion" : "4.0",
+  "numberOfWorkers" : 10,
+  "workerType" : "G.1X",
+  "executionClass" : "STANDARD",
+  "codeGenConfigurationNodes" : "{\"node-1724448270844\":{\"DynamicTransform\":{\"FunctionName\":\"gs_null_rows\",\"Inputs\":[\"node-1724448187897\"],\"Name\":\"Remove Null Rows\",\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"estrato\",\"Type\":\"bigint\"},{\"Name\":\"habitaciones\",\"Type\":\"bigint\"},{\"Name\":\"area\",\"Type\":\"bigint\"},{\"Name\":\"precio\",\"Type\":\"double\"},{\"Name\":\"vigencia\",\"Type\":\"bigint\"}]}],\"Parameters\":[],\"Path\":\"s3://aws-glue-studio-transforms-510798373988-prod-us-east-1/gs_null_rows.py\",\"TransformName\":\"gs_null_rows\",\"Version\":\"1.0.0\"}},\"node-1724448327477\":{\"S3GlueParquetTarget\":{\"AutoDataQuality\":{\"IsEnabled\":false},\"Compression\":\"snappy\",\"Inputs\":[\"node-1724448270844\"],\"Name\":\"Amazon S3\",\"PartitionKeys\":[],\"Path\":\"s3://csv-data-2024/resultados/\",\"SchemaChangePolicy\":{\"EnableUpdateCatalog\":false}}},\"node-1724448187897\":{\"CatalogSource\":{\"Database\":\"s3-ventas\",\"Name\":\"AWS Glue Data Catalog\",\"Table\":\"csv_data_2024\"}}}",
+  "sourceControlDetails" : {
+    "provider" : "GITHUB",
+    "repository" : "glue-project",
+    "branch" : "main",
+    "folder" : "sales-not-null"
+  }
+}
