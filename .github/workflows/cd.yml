@@ -39,15 +39,15 @@ jobs:
            unzip awscliv2.zip
            sudo ./aws/install
 
-       - name: Configure AWS credentials
-         if: success()
-         shell: bash
-         run: |
-           mkdir -p ~/.aws
-           touch ~/.aws/credentials
-           echo "[default]
-           aws_access_key_id = $AWS_ACCESS_KEY
-           aws_secret_access_key = $AWS_SECRET_KEY" > ~/.aws/credentials
+   #    - name: Configure AWS credentials
+   #      if: success()
+   #      shell: bash
+   #      run: |
+   #        mkdir -p ~/.aws
+   #        touch ~/.aws/credentials
+   #        echo "[default]
+   #        aws_access_key_id = $AWS_ACCESS_KEY
+   #        aws_secret_access_key = $AWS_SECRET_KEY" > ~/.aws/credentials
           
        - name: Download script to S3
          if: success()
