@@ -53,4 +53,6 @@ jobs:
           
       - name: Upload script to S3
         if: success()
-        run: aws s3 cp {{needs.job.output.s3_route}}
+        run: | 
+              mkdir artifact
+              aws s3 cp {{needs.job.output.s3_route}} ./artifact
