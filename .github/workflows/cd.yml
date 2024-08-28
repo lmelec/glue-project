@@ -27,8 +27,8 @@ jobs:
           ref: developer
       - name: Extract S3 Bucket Name   
         run: |
-              env.S3_ROUTE=$(grep 'scriptLocation' ${{env.FILENAME}} | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
-              echo "Ruta del S3: ${{env.S3_ROUTE}}"
+              env.S3_ROUTE=$(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
+              echo "Ruta del S3: $S3_ROUTE"
   deploy:
     needs: checkout
     runs-on: ubuntu-latest
@@ -50,15 +50,15 @@ jobs:
    #        aws_secret_access_key = $AWS_SECRET_KEY" > ~/.aws/credentials
 
        - name: print variable
-         run: echo ${{ env.S3_ROUTE }}
+         run: echo '$S3_ROUTE'
          
        - name: Download script to S3
          uses: keithweaver/aws-s3-github-action@v1.0.0
          with:
            command: cp
-           source: ${{ env.S3_ROUTE }}
-           aws_access_key_id: ${{ env.AWS_ACCESS_KEY }}
-           aws_secret_access_key: ${{ env.AWS_SECRET_KEY }}
+           source: $S3_ROUTE
+           aws_access_key_id: $AWS_ACCESS_KEY
+           aws_secret_access_key: $AWS_SECRET_KEY
            aws_region: us-east-1
       
       # - name: Deploy Script in Glue job
