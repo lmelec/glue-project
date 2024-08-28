@@ -20,16 +20,20 @@ env:
 jobs:
   checkout:
     runs-on: ubuntu-latest
+    outputs:
+        s3_route: ${{ steps.extract.outputs.s3_route }}
     steps: 
       - name: Download Source Code
         uses: actions/checkout@v4
         with:
           ref: main
-      - name: Extract S3 Bucket Name   
+      - name: Extract S3 Bucket Name
+        id: extract
         run: |
               S3_ROUTE=$(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
               echo "la ruta del S3 es: $S3_ROUTE"
-              echo "::set-output name=s3_route::$S3_ROUTE"
+              echo "S3_ROUTE=${S3_ROUTE}" >> $GITHUB_OUTPUT
+             
   deploy:
     needs: checkout
     runs-on: ubuntu-latest
@@ -37,7 +41,7 @@ jobs:
     
        - name: print variable
          run: |
-          echo "El valor de S3_ROUTE es: ${{ needs.extract-s3-route.outputs.s3-route }}"
+          echo "El valor de S3_ROUTE es:  ${{needs.checkout.outputs.s3_route}}"
          
        - name: Download script to S3
          uses: keithweaver/aws-s3-github-action@v1.0.0
