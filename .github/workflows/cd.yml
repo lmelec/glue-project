@@ -50,4 +50,5 @@ jobs:
             aws_secret_access_key: auKfWgcpkRXj8oMy6NdyK9uMxLcJoHrSkPlaAzNo
             source: ${{needs.checkout.outputs.s3_route}}
             dest: '.'   
+            flags: --recursive
      
