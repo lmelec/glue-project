@@ -10,7 +10,11 @@ on:
       - "**.json"
       
   workflow_dispatch:
-  
+      inputs:
+        reason:
+          required: false
+          default: 'warning'
+           
 env:
    S3_ROUTE: ""
    FILENAME: "./sales-not-null/sales-not-null.json"
@@ -39,16 +43,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:  
     
-       - name: print variable
-         run: |
-          echo "El valor de S3_ROUTE es:  ${{needs.checkout.outputs.s3_route}}"
-
-       - name: Download script to S3
-         uses: prewk/s3-cp-action@v2
-         with:
-            aws_access_key_id: AKIAZ2XULD4ZGPGMJ7MD
-            aws_secret_access_key: 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
-            source: ${{needs.checkout.outputs.s3_route}}
-            dest: '.'   
-            flags: --recursive
-     
+      - name: Configure AWS credentials
+        if: success()
+        shell: bash
+        run: |
+             mkdir -p ~/.aws
+             touch ~/.aws/credentials
+             echo "[default]
+             aws_access_key_id = $AWS_ACCESS_KEY
+             aws_secret_access_key = $AWS_SECRET_KEY" > ~/.aws/credentials
+          
+      - name: Upload script to S3
+        if: success()
+        run: aws s3 cp {{needs.job.output.s3_route}}
