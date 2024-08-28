@@ -1,4 +1,4 @@
-v# Pipeline solo para Glue Jobs creados desde un Script Editor
+# Pipeline solo para Glue Jobs creados desde un Script Editor
 name: glue-jobs-deploy 
 run-name: Glue Jobs Deployment Pipeline
 
