@@ -27,28 +27,14 @@ jobs:
           ref: developer
       - name: Extract S3 Bucket Name   
         run: |
-              S3_ROUTE=$(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
+              S3_ROUTE = $(grep 'scriptLocation' $FILENAME | awk -F ': ' '{gsub(/"|,/, "", $2); print $2}')
+              echo "S3_ROUTE=$S3_ROUTE" >> $GITHUB_ENV
               echo "Ruta del S3: $S3_ROUTE"
   deploy:
     needs: checkout
     runs-on: ubuntu-latest
     steps:  
-   #    - name: Download and install AWS CLI
-   #      run: |
-   #        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-   #        unzip awscliv2.zip
-   #        sudo ./aws/install
-
-   #    - name: Configure AWS credentials
-   #      if: success()
-   #      shell: bash
-   #      run: |
-   #        mkdir -p ~/.aws
-   #        touch ~/.aws/credentials
-   #        echo "[default]
-   #        aws_access_key_id = $AWS_ACCESS_KEY
-   #        aws_secret_access_key = $AWS_SECRET_KEY" > ~/.aws/credentials
-
+    
        - name: print variable
          run: echo '$S3_ROUTE'
          
@@ -60,13 +46,3 @@ jobs:
            aws_access_key_id: $AWS_ACCESS_KEY
            aws_secret_access_key: $AWS_SECRET_KEY
            aws_region: us-east-1
-      
-      # - name: Deploy Script in Glue job
-      #   if: success()
-      #   run: |
-      #     aws glue update-job --job-name "PoC Job" --job-update \
-      #       "Role=AWSGlueServiceRole-PoC,Command={Name=glueetl,ScriptLocation=s3://${{secrets.S3_BUCKET_NAME}}/job_${GITHUB_SHA}.py},Connections={Connections=redshift}" \
-      #       --region us-east-1
-      
-      # - name: Remove AWS credentials
-      #   run: rm -rf ~/.aws           
