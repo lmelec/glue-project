@@ -21,6 +21,8 @@ jobs:
     steps: 
       - name: Download Source Code
         uses: actions/checkout@v4
+        with:
+          ref: developer
 
   extract: 
     runs-on: ubuntu-latest
